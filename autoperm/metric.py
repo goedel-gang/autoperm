@@ -15,8 +15,8 @@ from util import strip_punc
 
 # avoids problems where CWD is not the directory the source file is in
 BEE_MOVIE_PATH = Path(__file__).parent / ".." / "texts" / "beemovie.txt"
-with BEE_MOVIE_PATH.open("r") as f:
-    BEE_MOVIE = f.read()
+with BEE_MOVIE_PATH.open("r") as bee_file:
+    BEE_MOVIE = bee_file.read()
 
 
 def blind_distribution(dist):
@@ -163,6 +163,13 @@ def blind_frequency_fit(text):
 
 
 if __name__ == "__main__":
+    import sys
+    stdin = None if sys.stdin.isatty() else sys.stdin.read()
     for metric in ioc, frequency_goodness_of_fit, blind_frequency_fit:
-        print(metric.random())
-        print(metric.english())
+        print("{} - random: {}".format(metric.measure.__name__,
+                                       metric.random()))
+        print("{} - English: {}".format(metric.measure.__name__,
+                                        metric.english()))
+        if stdin is not None:
+            print("{} - stdin: {}".format(metric.measure.__name__,
+                                          metric(stdin)))
