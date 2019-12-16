@@ -117,10 +117,12 @@ class SubstitutionHillClimber(HillClimber):
 
 if __name__ == "__main__":
     from metric import BEE_MOVIE
-    from util import permutation_from_key, strip_punc
-    plaintext = "".join(strip_punc(BEE_MOVIE))
-    key = permutation_from_key("linustorvalds")
-    ciphertext = "".join(substitution.func(plaintext, key))
-    print("ciphertext: {}".format(ciphertext))
+    from util import permutation_from_key, strip_punc, file_chars
+    if sys.stdin.isatty():
+        plaintext = "".join(strip_punc(BEE_MOVIE))
+        key = permutation_from_key("linustorvalds")
+        ciphertext = "".join(substitution.func(plaintext, key))
+    else:
+        ciphertext = "".join(strip_punc(file_chars(sys.stdin)))
     hill_climber = SubstitutionHillClimber(ciphertext, 1)
     hill_climber.hill_climb()
