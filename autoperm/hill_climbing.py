@@ -10,12 +10,14 @@ import math
 import sys
 import random
 import time
+import collections
 
 import abc
 
 from perm import Perm
 from substitution import substitution
 from quadgram_metric import quadgram_score
+from metric import ENGLISH_FREQUENCIES
 
 MOD_PERMUTATIONS = [Perm.from_cycle(transp)
         for transp in itertools.combinations(string.ascii_uppercase, 2)]
@@ -83,7 +85,10 @@ class SubstitutionHillClimber(HillClimber):
     __slots__ = "key",
 
     def initialise_state(self):
-        self.key = Perm.random(string.ascii_uppercase)
+        frequencies = collections.Counter(self.text)
+        self.key = Perm({a: b for (a, _), (b, _) in
+                zip(frequencies.most_common(),
+                    collections.Counter(ENGLISH_FREQUENCIES).most_common())})
 
     def format_state(self):
         print("key:\n{}".format(self.key.inverse().table_format()))
