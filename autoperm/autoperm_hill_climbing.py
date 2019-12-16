@@ -1,3 +1,5 @@
+# vim: ts=4 sw=0 sts=-1 et ai tw=80
+
 import string
 import random
 
@@ -8,6 +10,7 @@ from perm import Perm
 
 
 class AutopermHillClimber(HillClimber):
+    __slots__ = "sigma", "tau"
     def initialise_state(self):
         self.sigma = Perm.random(string.ascii_uppercase)
         self.tau = Perm.random(string.ascii_uppercase)

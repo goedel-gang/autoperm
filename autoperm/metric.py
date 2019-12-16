@@ -77,6 +77,8 @@ class Metric:
     """
     A decorator for a function which computes some measure for generated text.
     """
+    __slots__ = "measure",
+
     def __init__(self, measure):
         """
         `measure` should be a function which takes an iterable and computes the

@@ -89,6 +89,8 @@ class CipherStreamer:
     ...     pass
     >>> my_cipher.func
     """
+    __slots__ = "func",
+
     def __init__(self, func):
         """
         Func should be a generator with first positional argument an iterable of

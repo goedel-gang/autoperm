@@ -1,3 +1,5 @@
+# vim: ts=4 sw=0 sts=-1 et ai tw=80
+
 """
 A metric scoring text based on expected quadgram frequency.
 

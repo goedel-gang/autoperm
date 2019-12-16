@@ -21,6 +21,8 @@ class Perm:
     and you've given it a mapping that is a bijection. If you can't be sure,
     feel free to check with .is_permutation().
     """
+    __slots__ = "mapping",
+
     # I know what I'm doing:
     # pylint: disable=dangerous-default-value
     def __init__(self, mapping={}):

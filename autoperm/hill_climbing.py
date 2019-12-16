@@ -1,3 +1,5 @@
+# vim: ts=4 sw=0 sts=-1 et ai tw=80
+
 """
 Early beta release of hill climbing attack on simple substitution ciphers
 """
@@ -10,6 +12,7 @@ import itertools
 import math
 import sys
 import random
+import time
 
 import abc
 
@@ -25,6 +28,8 @@ class HillClimber(abc.ABC):
     """
     Class keeping track of the various bits of state needed to climb hills
     """
+    __slots__ = "text", "best_score", "total_keys_tried", "update_interval"
+
     def __init__(self, text, update_interval=1000):
         self.text = text
         self.initialise_state()
@@ -46,16 +51,17 @@ class HillClimber(abc.ABC):
     def get_score(self, state): ...
 
     def hill_climb(self):
+        start_time = time.time()
         iterations = 0
-        while True:
-            if self.hill_climb_iteration():
-                iterations += 1
-                print("iteration {}, score {:.0f}".format(iterations,
-                                                          self.best_score))
-                self.format_state()
-            else:
-                break
+        while self.hill_climb_iteration():
+            iterations += 1
+            print("iteration {}, score {:.0f}".format(iterations,
+                                                      self.best_score))
+            self.format_state()
+        end_time = time.time()
         print("optimum reached, score {:.0f}".format(self.best_score))
+        print("average {:.1f} keys / s".format(
+                self.total_keys_tried / (end_time - start_time)))
         self.format_state()
 
     def hill_climb_iteration(self):
@@ -76,6 +82,8 @@ class HillClimber(abc.ABC):
             return False
 
 class SubstitutionHillClimber(HillClimber):
+    __slots__ = "key",
+
     def initialise_state(self):
         self.key = Perm.random(string.ascii_uppercase)
 
