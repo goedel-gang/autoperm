@@ -12,13 +12,14 @@ import collections
 # of module
 from perm import Perm
 
-# TODO: probably it's faster to just read it all into memory. We're almost
-#       invariably dealing with tiny, tiny files.
 def file_chars(file):
     """
-    Generate the characters in a file one by one
+    Generate the characters in a file one by one.
+
+    This just reads the file into memory. It's not worth doing anything stupid
+    with iterators because we're dealing with tiny tiny files.
     """
-    return iter(lambda: file.read(1), "")
+    return file.read()
 
 
 # TODO: try to do something with stripping accents from Unicode characters with

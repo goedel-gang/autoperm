@@ -59,8 +59,10 @@ class HillClimber(abc.ABC):
             self.format_state()
         end_time = time.time()
         print("optimum reached, score {:.0f}".format(self.best_score))
-        print("average {:.1f} keys / s".format(
-                self.total_keys_tried / (end_time - start_time)))
+        print("average {:.2e} keys / s / letter".format(
+                self.total_keys_tried
+                / (end_time - start_time)
+                / len(self.text)))
         self.format_state()
 
     def hill_climb_iteration(self):
@@ -97,8 +99,6 @@ class SubstitutionHillClimber(HillClimber):
                     [:1000]))
 
     def modify_state(self):
-        # try a random permutation to see if it sticks
-        yield Perm.random(string.ascii_uppercase)
         # try all other permutations, randomly ordered. The shuffling here
         # doesn't take place in a bottleneck, and it hopefully prevents the
         # search path from becoming too homogeneous.
@@ -124,5 +124,5 @@ if __name__ == "__main__":
         ciphertext = "".join(substitution.func(plaintext, key))
     else:
         ciphertext = "".join(strip_punc(file_chars(sys.stdin)))
-    hill_climber = SubstitutionHillClimber(ciphertext, 1)
+    hill_climber = SubstitutionHillClimber(ciphertext, 20)
     hill_climber.hill_climb()
