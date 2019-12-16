@@ -4,9 +4,6 @@
 Early beta release of hill climbing attack on simple substitution ciphers
 """
 
-# TODO: write this all more generally probably. Currently more of a proof of
-#       concept than anything else
-
 import string
 import itertools
 import math
@@ -22,7 +19,7 @@ from quadgram_metric import quadgram_score
 
 MOD_PERMUTATIONS = [Perm.from_cycle(transp)
         for transp in itertools.combinations(string.ascii_uppercase, 2)]
-UPDATE_INTERVAL = 1000
+
 
 class HillClimber(abc.ABC):
     """
@@ -81,6 +78,7 @@ class HillClimber(abc.ABC):
             print("\n", end="", file=sys.stderr)
             return False
 
+
 class SubstitutionHillClimber(HillClimber):
     __slots__ = "key",
 
@@ -114,8 +112,7 @@ class SubstitutionHillClimber(HillClimber):
 
 if __name__ == "__main__":
     from metric import BEE_MOVIE
-    from autoperm import permutation_from_key
-    from util import strip_punc
+    from util import permutation_from_key, strip_punc
     plaintext = "".join(strip_punc(BEE_MOVIE))
     key = permutation_from_key("linustorvalds")
     ciphertext = "".join(substitution.func(plaintext, key))

@@ -7,8 +7,11 @@ Unit tests for util.py
 import unittest
 
 import io
+import string
+import random
 
-from autoperm.util import file_chars, strip_punc
+from autoperm.perm import Perm
+from autoperm.util import file_chars, strip_punc, permutation_from_key
 
 
 class TestUtil(unittest.TestCase):
@@ -28,6 +31,35 @@ class TestUtil(unittest.TestCase):
     def test_strip_punc(self):
         for input_text, result in self.strings:
             self.assertEqual("".join(strip_punc(input_text)), result)
+
+    def test_permutation_from_key(self):
+        self.assertEqual(Perm(), permutation_from_key(""))
+        self.assertEqual(Perm(), permutation_from_key("a"))
+        self.assertEqual(Perm(), permutation_from_key("A"))
+        self.assertEqual(Perm(), permutation_from_key("?a?"))
+        self.assertEqual(Perm(), permutation_from_key("!!"))
+        for ind, l in enumerate(string.ascii_uppercase):
+            self.assertEqual(Perm.from_cycle(string.ascii_uppercase) ** ind,
+                             permutation_from_key(l))
+        self.assertEqual(Perm(dict(zip(string.ascii_uppercase,
+                                       "LINUSTORVADEFGHJKMPQWXYZBC"))),
+                         permutation_from_key("linustorvalds"))
+        self.assertEqual(Perm(dict(zip(string.ascii_uppercase,
+                                       "LINUSTORVADEFGHJKMPQWXYZBC"))),
+                         permutation_from_key("linuStOrvALds"))
+        self.assertEqual(Perm(dict(zip(string.ascii_uppercase,
+                                       "LINUSTORVADEFGHJKMPQWXYZBC"))),
+                         permutation_from_key("  lin\nuStO&&(*rvA)*)(*Lds"))
+        self.assertEqual(Perm(dict(zip(string.ascii_uppercase,
+                                       "RICHADSTLMNOPQUVWXYZBEFGJK"))),
+                         permutation_from_key("richardstallman"))
+        self.assertEqual(Perm(dict(zip(string.ascii_uppercase,
+                                       "ZEBRACDFGHIJKLMNOPQSTUVWXY"))),
+                         permutation_from_key("zebra"))
+        for _ in range(100):
+            key = "".join(random.choices(string.ascii_uppercase,
+                                         k=random.randrange(30)))
+            self.assertTrue(permutation_from_key(key).is_permutation())
 
 
 if __name__ == "__main__":

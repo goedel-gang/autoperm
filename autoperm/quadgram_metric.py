@@ -26,10 +26,11 @@ def rolling_slice(iterable, n):
     deque that it modifies, so the caller is responsible for deep-copying if
     they need to.
     """
-    window = collections.deque(itertools.islice(iterable, n), maxlen=n)
+    to_exhaust = iter(iterable)
+    window = collections.deque(itertools.islice(to_exhaust, n), maxlen=n)
     if len(window) == n:
         yield window
-    for i in iterable:
+    for i in to_exhaust:
         window.append(i)
         yield window
 
@@ -37,10 +38,21 @@ def rolling_slice(iterable, n):
 def get_quadgram_score(quadgram):
     """
     Convert a quadgram to an score from the dataset. The quadgram should be
-    represented as integers (A = 0, ..., Z = 25)
+    represented as four integers (A = 0, ..., Z = 25).
+
+    This function does no kind of validation at all, as it is likely to be used
+    in some tight loops.
     """
     return QUADGRAM_FREQUENCIES[
             sum(r * 26 ** (3 - i) for i, r in enumerate(quadgram))]
+
+
+def letters_to_integers(text):
+    """
+    Convert uppercase letters to their index in the alphabet
+    (A = 0, ..., Z = 25)
+    """
+    return (ord(c) - 0x41 for c in text)
 
 
 @metric.Metric
@@ -61,7 +73,7 @@ def quadgram_score(text):
     to be.
     """
     return sum(get_quadgram_score(quadgram)
-            for quadgram in rolling_slice((ord(c) - 0x41 for c in text), 4))
+            for quadgram in rolling_slice(letters_to_integers(text), 4))
 
 
 if __name__ == "__main__":

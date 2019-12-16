@@ -14,42 +14,13 @@ import io
 from pathlib import Path
 
 from autoperm.perm import Perm
-from autoperm.autoperm import (autoperm_encipher, autoperm_decipher,
-                               permutation_from_key)
+from autoperm.autoperm import autoperm_encipher, autoperm_decipher
+from autoperm.util import permutation_from_key
 
 TEXTS_DIR = Path(__file__).parent / ".." / "texts"
 
 
 class TestAutoPerm(unittest.TestCase):
-    def test_permutation_from_key(self):
-        self.assertEqual(Perm(), permutation_from_key(""))
-        self.assertEqual(Perm(), permutation_from_key("a"))
-        self.assertEqual(Perm(), permutation_from_key("A"))
-        self.assertEqual(Perm(), permutation_from_key("?a?"))
-        self.assertEqual(Perm(), permutation_from_key("!!"))
-        for ind, l in enumerate(string.ascii_uppercase):
-            self.assertEqual(Perm.from_cycle(string.ascii_uppercase) ** ind,
-                             permutation_from_key(l))
-        self.assertEqual(Perm(dict(zip(string.ascii_uppercase,
-                                       "LINUSTORVADEFGHJKMPQWXYZBC"))),
-                         permutation_from_key("linustorvalds"))
-        self.assertEqual(Perm(dict(zip(string.ascii_uppercase,
-                                       "LINUSTORVADEFGHJKMPQWXYZBC"))),
-                         permutation_from_key("linuStOrvALds"))
-        self.assertEqual(Perm(dict(zip(string.ascii_uppercase,
-                                       "LINUSTORVADEFGHJKMPQWXYZBC"))),
-                         permutation_from_key("  lin\nuStO&&(*rvA)*)(*Lds"))
-        self.assertEqual(Perm(dict(zip(string.ascii_uppercase,
-                                       "RICHADSTLMNOPQUVWXYZBEFGJK"))),
-                         permutation_from_key("richardstallman"))
-        self.assertEqual(Perm(dict(zip(string.ascii_uppercase,
-                                       "ZEBRACDFGHIJKLMNOPQSTUVWXY"))),
-                         permutation_from_key("zebra"))
-        for _ in range(100):
-            key = "".join(random.choices(string.ascii_uppercase,
-                                         k=random.randrange(30)))
-            self.assertTrue(permutation_from_key(key).is_permutation())
-
     def test_autoperm_encipher(self):
         sigma = Perm.from_cycle("ABCD")
         tau = Perm.from_cycle("AB") * Perm.from_cycle("CD")

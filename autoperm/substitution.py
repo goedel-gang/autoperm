@@ -7,7 +7,7 @@ Implementing a substitution cipher
 import argparse
 
 from cipher_streamer import CipherStreamer
-from autoperm import permutation_from_key
+from util import permutation_from_key
 
 
 @CipherStreamer

@@ -45,8 +45,7 @@ class AutopermHillClimber(HillClimber):
 
 if __name__ == "__main__":
     from metric import BEE_MOVIE
-    from autoperm import permutation_from_key
-    from util import strip_punc
+    from util import permutation_from_key, strip_punc
     plaintext = "".join(strip_punc(BEE_MOVIE))
     sigma = permutation_from_key("richardstallman")
     tau = permutation_from_key("linustorvalds")

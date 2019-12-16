@@ -158,12 +158,12 @@ class Perm:
         """
         return "{}({})".format(type(self).__name__, self.mapping)
 
-    def table_format(self, sort_key=lambda x: x):
+    def table_format(self, key=lambda x: x):
         """
         Format permutation as a table. Sorts by key value, so you get a nice
         easily interpretable table, most of the time.
         """
-        kv_pairs = sorted(self.mapping.items(), key=sort_key)
+        kv_pairs = sorted(self.mapping.items(), key=lambda tup: key(tup[0]))
         if not kv_pairs:
             return "Id\n"
         keys, values = zip(*kv_pairs)

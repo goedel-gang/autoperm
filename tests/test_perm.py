@@ -206,7 +206,6 @@ class TestPerm(unittest.TestCase):
         self.assertEqual(repr(Perm()),
                          "Perm({})")
 
-    # TODO: write tests for key here
     def test_table_format(self):
         for g in self.perms:
             g.table_format()
@@ -219,6 +218,12 @@ class TestPerm(unittest.TestCase):
         self.assertEqual(Perm({2: 1, 1: 2}).table_format(), "1 2\n2 1")
         self.assertEqual(Perm({100: 2, 2: 100}).table_format(),
                          "  2 100\n100   2")
+        self.assertEqual(Perm({-2: 1, 1: -2}).table_format(),
+                         "-2  1\n 1 -2")
+        self.assertEqual(Perm({-2: 1, 1: -2}).table_format(key=abs),
+                         " 1 -2\n-2  1")
+        self.assertEqual(Perm({100: 2, 2: 100}).table_format(lambda x: -x),
+                         "100   2\n  2 100")
 
 
 if __name__ == "__main__":
