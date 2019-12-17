@@ -4,6 +4,8 @@
 Early beta release of hill climbing attack on simple substitution ciphers
 """
 
+# TODO: beg the user to run pypy
+
 import string
 import itertools
 import math
@@ -49,26 +51,29 @@ class HillClimber(abc.ABC):
     @abc.abstractmethod
     def get_score(self, state): ...
 
-    def hill_climb(self):
+    def hill_climb(self, verbose=True):
         start_time = time.time()
         iterations = 0
-        while self.hill_climb_iteration():
+        while self.hill_climb_iteration(verbose):
             iterations += 1
-            print("iteration {}, score {:.0f}".format(iterations,
-                                                      self.best_score))
+            if verbose:
+                print("iteration {}, score {:.3e}".format(iterations,
+                                                        self.best_score))
             self.format_state()
         end_time = time.time()
-        print("optimum reached, score {:.0f}".format(self.best_score))
-        print("average {:.2e} keys / s / letter".format(
-                self.total_keys_tried
-                / (end_time - start_time)
-                / len(self.text)))
+        if verbose:
+            print("optimum reached, score {:.3e}".format(self.best_score))
+            print("average {:.2e} keys / s / letter".format(
+                    self.total_keys_tried
+                    / (end_time - start_time)
+                    / len(self.text)))
         self.format_state()
+        return self.get_state(), self.best_score
 
-    def hill_climb_iteration(self):
+    def hill_climb_iteration(self, verbose):
         for modified_state in self.modify_state():
             self.total_keys_tried += 1
-            if self.total_keys_tried % self.update_interval == 0:
+            if verbose and self.total_keys_tried % self.update_interval == 0:
                 print("\rtried {} keys".format(self.total_keys_tried),
                       end="", file=sys.stderr)
             # no walrus for compatibility

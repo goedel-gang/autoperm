@@ -10,7 +10,7 @@ import io
 import random
 import textwrap as tw
 
-from autoperm.cipher_streamer import CipherStreamer, chunk, get_lines
+from autoperm.cipher_streamer import CipherStreamer, get_lines
 
 
 # generators for use in TestCipherStreamer
@@ -198,16 +198,6 @@ class TestCipherStreamer(unittest.TestCase):
                 """)
         self.input_file = io.StringIO(self.input_text)
         self.output_file = io.StringIO()
-
-    def test_chunk(self):
-        self.assertEqual(list(chunk([], 1)), [])
-        self.assertEqual(list(chunk([], 2)), [])
-        self.assertEqual(list(chunk(range(4), 2)),
-                         [(0, 1), (2, 3)])
-        self.assertEqual(list(chunk(range(4), 3)),
-                         [(0, 1, 2), (3, None, None)])
-        self.assertEqual(list(chunk(range(4), 3, 4)),
-                         [(0, 1, 2), (3, 4, 4)])
 
     def test_call(self):
         for g in self.generators:

@@ -11,7 +11,7 @@ import string
 import random
 
 from autoperm.perm import Perm
-from autoperm.util import file_chars, strip_punc, permutation_from_key
+from autoperm.util import file_chars, strip_punc, permutation_from_key, chunk
 
 
 class TestUtil(unittest.TestCase):
@@ -22,6 +22,16 @@ class TestUtil(unittest.TestCase):
                 ("abc", "ABC"),
                 ("aBc", "ABC"),
                 (",A987B^&*C*", "ABC")]
+
+    def test_chunk(self):
+        self.assertEqual(list(chunk([], 1)), [])
+        self.assertEqual(list(chunk([], 2)), [])
+        self.assertEqual(list(chunk(range(4), 2)),
+                         [(0, 1), (2, 3)])
+        self.assertEqual(list(chunk(range(4), 3)),
+                         [(0, 1, 2), (3, None, None)])
+        self.assertEqual(list(chunk(range(4), 3, 4)),
+                         [(0, 1, 2), (3, 4, 4)])
 
     def test_file_chars(self):
         for input_text, _ in self.strings:

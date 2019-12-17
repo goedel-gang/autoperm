@@ -7,6 +7,7 @@ files.
 
 import string
 import collections
+import itertools
 
 # I think it's fine to import from perm because perm is a very stand-alone sort
 # of module
@@ -71,3 +72,11 @@ def permutation_from_key(key):
     for ind, k in enumerate(from_iterable):
         mapping[k] = alphabet[(start_index + ind) % len(alphabet)]
     return Perm(mapping)
+
+
+def chunk(iterable, size, fillvalue=None):
+    """
+    Split an iterable into chunks of size `size`. Padded with `fillvalue` if
+    necessary.
+    """
+    return itertools.zip_longest(*[iter(iterable)] * size, fillvalue=fillvalue)

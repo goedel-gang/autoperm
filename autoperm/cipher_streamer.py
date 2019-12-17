@@ -6,19 +6,11 @@ Cipher streamer class
 
 import itertools
 
-from util import file_chars, strip_punc
+from util import file_chars, strip_punc, chunk
 
 # Block default of 4 makes much more sense :P
 BLOCK_DEFAULT = 4
 WIDTH_DEFAULT = 80
-
-
-def chunk(iterable, size, fillvalue=None):
-    """
-    Split an iterable into chunks of size `size`. Padded with `fillvalue` if
-    necessary.
-    """
-    return itertools.zip_longest(*[iter(iterable)] * size, fillvalue=fillvalue)
 
 
 def get_lines(iterable, block, width):
@@ -186,3 +178,7 @@ class CipherStreamer:
         for punc in in_file_2:
             if not punc.isalpha():
                 out_file.write(punc)
+
+
+def cipher_streamer_main(additional_args,):
+    pass #TODO

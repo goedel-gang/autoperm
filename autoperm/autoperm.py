@@ -20,8 +20,8 @@ import collections
 import argparse
 
 from perm import Perm
-from cipher_streamer import CipherStreamer, chunk, BLOCK_DEFAULT, WIDTH_DEFAULT
-from util import strip_punc, permutation_from_key
+from cipher_streamer import CipherStreamer, BLOCK_DEFAULT, WIDTH_DEFAULT
+from util import strip_punc, permutation_from_key, chunk
 
 
 @CipherStreamer
