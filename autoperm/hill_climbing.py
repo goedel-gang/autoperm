@@ -59,7 +59,7 @@ class HillClimber(abc.ABC):
             if verbose:
                 print("iteration {}, score {:.3e}".format(iterations,
                                                         self.best_score))
-            self.format_state()
+                self.format_state()
         end_time = time.time()
         if verbose:
             print("optimum reached, score {:.3e}".format(self.best_score))
@@ -67,7 +67,7 @@ class HillClimber(abc.ABC):
                     self.total_keys_tried
                     / (end_time - start_time)
                     / len(self.text)))
-        self.format_state()
+            self.format_state()
         return self.get_state(), self.best_score
 
     def hill_climb_iteration(self, verbose):
@@ -81,10 +81,12 @@ class HillClimber(abc.ABC):
             if score < self.best_score:
                 self.set_state(modified_state)
                 self.best_score = score
-                print("\n", end="", file=sys.stderr)
+                if verbose:
+                    print("\n", end="", file=sys.stderr)
                 return True
         else:
-            print("\n", end="", file=sys.stderr)
+            if verbose:
+                print("\n", end="", file=sys.stderr)
             return False
 
 
